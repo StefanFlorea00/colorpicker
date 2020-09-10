@@ -1,40 +1,38 @@
 .colorSelectWrapper {
-    border-radius: 10px;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    width: 300px;
-    padding: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: rgb(247, 247, 247);
-    box-shadow: inset 0px 0px 20px -10px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  width: 300px;
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgb(247, 247, 247);
+  box-shadow: inset 0px 0px 20px -10px rgba(0, 0, 0, 0.25);
 }
 
 .colorResultWrapper {
-    border-radius: 10px;
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    width: 200px;
-    height: 300px;
-    padding: 10px;
-    background-color: rgb(247, 247, 247);
-    box-shadow: inset 0px 0px 20px -10px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  width: 200px;
+  height: 300px;
+  padding: 10px;
 }
 
 .resultsWrapper {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: center;
 }
 
 .colorSelectWrapper p {
-    font-size: 15px;
-    font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  font-family: "Courier New", Courier, monospace;
 }
 
 .colorDiv {
-    width: 150px;
-    height: 150px;
-    border-radius: 10px;
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
 }

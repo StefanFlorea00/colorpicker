@@ -8,9 +8,11 @@ function runColorPicker() {
 
   harmonySelect.addEventListener("change", function () {
     console.log(getHarmony(this));
-    calculateHarmony(getHarmony(this), getHSLValue(colorPicker));
+    calculateHarmony(getHarmony(this), getHexValue(colorPicker));
   });
-  colorPicker.addEventListener("input", updateColors);
+  colorPicker.addEventListener("input", function () {
+    updateDisplayHex("#colorSelect", this.value);
+  });
 }
 
 function getHarmony(element) {
@@ -26,45 +28,6 @@ function getHarmony(element) {
     default:
       return "analogous";
   }
-}
-
-function calculateHarmony(type, color) {
-  switch (type) {
-    case "analogous":
-      calculateAnalogous(color);
-      break;
-    case "monochromatic":
-      calculateMonochromatic(color);
-      break;
-    case "triad":
-      calculateTriad(color);
-      break;
-    case "shades":
-      calculateShades(color);
-      break;
-  }
-}
-
-function calculateAnalogous(color) {
-  console.log("calculateAnalogous");
-}
-
-function calculateMonochromatic(color) {}
-
-function calculateTriad(color) {}
-
-function calculateShades(color) {}
-
-function updateColors() {
-  let hexValue = getHexValue(this);
-  let rgbValue = getRGBValue(this);
-  let hslValue = getHSLValue(this);
-  updateDisplay("#colorSelect", hexValue, rgbValue, hslValue);
-  updateDisplay("#colorResult0", hexValue, rgbValue, hslValue);
-  updateDisplay("#colorResult1", hexValue, rgbValue, hslValue);
-  updateDisplay("#colorResult2", hexValue, rgbValue, hslValue);
-  updateDisplay("#colorResult3", hexValue, rgbValue, hslValue);
-  updateDisplay("#colorResult4", hexValue, rgbValue, hslValue);
 }
 
 function getHexValue(element) {
@@ -92,11 +55,60 @@ function getHSLValue(element) {
   return hslValue;
 }
 
-function updateDisplay(element, hex, rgb, hsl) {
-  updateHexView(`${element} #hexP`, hex);
-  updateRGBView(`${element} #rgbP`, rgb);
-  updateHSLView(`${element} #hslP`, hsl);
-  updateColorView(`${element} .colorDiv`, hex);
+function calculateHarmony(type, hexValue) {
+  switch (type) {
+    case "analogous":
+      calculateAnalogous(hexValue);
+      break;
+    case "monochromatic":
+      calculateMonochromatic(hexValue);
+      break;
+    case "triad":
+      calculateTriad(hexValue);
+      break;
+    case "shades":
+      calculateShades(hexValue);
+      break;
+    case "compound":
+      calculateCompound(hexValue);
+      break;
+  }
+}
+
+function calculateAnalogous(hexValue) {
+  let rgbValue = hexToRGB(hexValue);
+  let hslValue = RGBToHSL(rgbValue);
+  for (let i = 0; i < 5; i++) {
+    hslValue.h = hslValue.h + i * 20;
+    console.log("updated", hslValue);
+    updateDisplayHSL(`#colorResult${i}`, hslValue);
+  }
+}
+
+function calculateMonochromatic(color) {}
+
+function calculateTriad(color) {}
+
+function calculateShades(color) {}
+
+function calculateCompound(color) {}
+
+function updateDisplayHSL(element, hslValue) {
+  let rgbValue = HSLtoRGB(hslValue);
+  let hexValue = RGBToHex(rgbValue);
+  updateHexView(`${element} #hexP`, hexValue);
+  updateRGBView(`${element} #rgbP`, rgbValue);
+  updateHSLView(`${element} #hslP`, hslValue);
+  updateColorView(`${element} .colorDiv`, hexValue);
+}
+
+function updateDisplayHex(element, hexValue) {
+  let rgbValue = hexToRGB(hexValue);
+  let hslValue = RGBToHSL(rgbValue);
+  updateHexView(`${element} #hexP`, hexValue);
+  updateRGBView(`${element} #rgbP`, rgbValue);
+  updateHSLView(`${element} #hslP`, hslValue);
+  updateColorView(`${element} .colorDiv`, hexValue);
 }
 
 function updateColorView(element, hex) {
@@ -132,10 +144,10 @@ function hexToRGB(hex) {
   }
 }
 
-function RGBToHSL(r, g, b) {
-  r /= 255;
-  g /= 255;
-  b /= 255;
+function RGBToHSL(rgb) {
+  let r = (rgb.r /= 255);
+  let g = (rgb.g /= 255);
+  let b = (rgb.b /= 255);
   let h, s, l;
 
   const min = Math.min(r, g, b);
@@ -166,4 +178,58 @@ function RGBToHSL(r, g, b) {
     s: Math.floor(s),
     l: Math.floor(l),
   };
+}
+
+function HSLtoRGB(hsl) {
+  let h = hsl.h;
+  let s = hsl.s / 100;
+  let l = hsl.l / 100;
+
+  let c = (1 - Math.abs(2 * l - 1)) * s,
+    x = c * (1 - Math.abs(((h / 60) % 2) - 1)),
+    m = l - c / 2,
+    r = 0,
+    g = 0,
+    b = 0;
+  if (0 <= h && h < 60) {
+    r = c;
+    g = x;
+    b = 0;
+  } else if (60 <= h && h < 120) {
+    r = x;
+    g = c;
+    b = 0;
+  } else if (120 <= h && h < 180) {
+    r = 0;
+    g = c;
+    b = x;
+  } else if (180 <= h && h < 240) {
+    r = 0;
+    g = x;
+    b = c;
+  } else if (240 <= h && h < 300) {
+    r = x;
+    g = 0;
+    b = c;
+  } else if (300 <= h && h < 360) {
+    r = c;
+    g = 0;
+    b = x;
+  }
+  return {
+    r: Math.round((r + m) * 255),
+    g: Math.round((g + m) * 255),
+    b: Math.round((b + m) * 255),
+  };
+}
+
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function RGBToHex(rgb) {
+  return (
+    "#" + componentToHex(rgb.r) + componentToHex(rgb.g) + componentToHex(rgb.b)
+  );
 }
