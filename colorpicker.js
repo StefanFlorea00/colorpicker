@@ -4,12 +4,67 @@ runColorPicker();
 
 function runColorPicker() {
   const colorPicker = document.querySelector("#colorpicker");
-  colorPicker.addEventListener("input", function () {
-    let hexValue = getHexValue(this);
-    let rgbValue = getRGBValue(this);
-    let hslValue = getHSLValue(this);
-    updateDisplay(hexValue, rgbValue, hslValue);
+  const harmonySelect = document.querySelector("#harmonySelect");
+
+  harmonySelect.addEventListener("change", function () {
+    console.log(getHarmony(this));
+    calculateHarmony(getHarmony(this), getHSLValue(colorPicker));
   });
+  colorPicker.addEventListener("input", updateColors);
+}
+
+function getHarmony(element) {
+  switch (element.value) {
+    case "analogous":
+      return "analogous";
+    case "monochromatic":
+      return "monochromatic";
+    case "triad":
+      return "triad";
+    case "shades":
+      return "shades";
+    default:
+      return "analogous";
+  }
+}
+
+function calculateHarmony(type, color) {
+  switch (type) {
+    case "analogous":
+      calculateAnalogous(color);
+      break;
+    case "monochromatic":
+      calculateMonochromatic(color);
+      break;
+    case "triad":
+      calculateTriad(color);
+      break;
+    case "shades":
+      calculateShades(color);
+      break;
+  }
+}
+
+function calculateAnalogous(color) {
+  console.log("calculateAnalogous");
+}
+
+function calculateMonochromatic(color) {}
+
+function calculateTriad(color) {}
+
+function calculateShades(color) {}
+
+function updateColors() {
+  let hexValue = getHexValue(this);
+  let rgbValue = getRGBValue(this);
+  let hslValue = getHSLValue(this);
+  updateDisplay("#colorSelect", hexValue, rgbValue, hslValue);
+  updateDisplay("#colorResult0", hexValue, rgbValue, hslValue);
+  updateDisplay("#colorResult1", hexValue, rgbValue, hslValue);
+  updateDisplay("#colorResult2", hexValue, rgbValue, hslValue);
+  updateDisplay("#colorResult3", hexValue, rgbValue, hslValue);
+  updateDisplay("#colorResult4", hexValue, rgbValue, hslValue);
 }
 
 function getHexValue(element) {
@@ -37,29 +92,28 @@ function getHSLValue(element) {
   return hslValue;
 }
 
-function updateDisplay(hex, rgb, hsl) {
-  updateHexView(hex);
-  updateRGBView(rgb);
-  updateHSLView(hsl);
-  updateColorView(hex);
+function updateDisplay(element, hex, rgb, hsl) {
+  updateHexView(`${element} #hexP`, hex);
+  updateRGBView(`${element} #rgbP`, rgb);
+  updateHSLView(`${element} #hslP`, hsl);
+  updateColorView(`${element} .colorDiv`, hex);
 }
 
-function updateColorView(hex) {
-  document.querySelector(".colorDiv").style.backgroundColor = hex;
+function updateColorView(element, hex) {
+  document.querySelector(element).style.backgroundColor = hex;
 }
 
-function updateHexView(hex) {
-  document.querySelector("#hexP").textContent = "HEX: " + hex;
+function updateHexView(element, hex) {
+  document.querySelector(element).textContent = "HEX: " + hex;
 }
 
-function updateHSLView(hsl) {
-  document.querySelector("#hslP").textContent =
+function updateHSLView(element, hsl) {
+  document.querySelector(element).textContent =
     "HSL: " + hsl.h + "," + hsl.s + "%," + hsl.l + "%";
 }
 
-function updateRGBView(rgb) {
-  console.log(rgb);
-  document.querySelector("#rgbP").textContent =
+function updateRGBView(element, rgb) {
+  document.querySelector(element).textContent =
     "RGB: " + rgb.r + "," + rgb.g + "," + rgb.b;
 }
 
@@ -107,7 +161,6 @@ function RGBToHSL(r, g, b) {
   }
   s *= 100;
   l *= 100;
-  console.log("hsl(%f,%f%,%f%)", h, s, l);
   return {
     h: Math.floor(h),
     s: Math.floor(s),
