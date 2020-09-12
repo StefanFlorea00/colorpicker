@@ -1,74 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
+    <div class="colorSelectWrapper" id="colorSelect">
+      <div class="colorDiv"></div>
+      <p id="hexP">HEX:</p>
+      <p id="rgbP">RGB:</p>
+      <p id="hslP">HSL:</p>
+      <input type="color" id="colorpicker" />
+    </div>
 
-    <select name="harmony" id="harmonySelect">
+    <div class="harmonyWrapper">
+      <select name="harmony" id="harmonySelect">
         <option value="analogous">Analogous</option>
         <option value="monochromatic">Monochromatic</option>
         <option value="triad">Triad</option>
-        <option value="triad"></option>
+        <option value="compound">Compound</option>
         <option value="shades">Shades</option>
-    </select>
-
-    <div class="colorSelectWrapper" id="colorSelect">
-        <div class="colorDiv">
-        </div>
-        <p id="hexP">HEX:</p>
-        <p id="rgbP">RGB:</p>
-        <p id="hslP">HSL:</p>
-        <input type="color" id="colorpicker">
+      </select>
     </div>
 
     <div class="resultsWrapper">
-        <div class="colorResultWrapper" id="colorResult0">
-            <div class="colorDiv">
-            </div>
-            <p id="hexP">HEX:</p>
-            <p id="rgbP">RGB:</p>
-            <p id="hslP">HSL:</p>
-        </div>
+      <div class="colorResultWrapper" id="colorResult0">
+        <div class="colorDiv"></div>
+        <p id="hexP">HEX:</p>
+        <p id="rgbP">RGB:</p>
+        <p id="hslP">HSL:</p>
+      </div>
 
-        <div class="colorResultWrapper" id="colorResult1">
-            <div class="colorDiv">
-            </div>
-            <p id="hexP">HEX:</p>
-            <p id="rgbP">RGB:</p>
-            <p id="hslP">HSL:</p>
-        </div>
+      <div class="colorResultWrapper" id="colorResult1">
+        <div class="colorDiv"></div>
+        <p id="hexP">HEX:</p>
+        <p id="rgbP">RGB:</p>
+        <p id="hslP">HSL:</p>
+      </div>
 
-        <div class="colorResultWrapper" id="colorResult2">
-            <div class="colorDiv">
-            </div>
-            <p id="hexP">HEX:</p>
-            <p id="rgbP">RGB:</p>
-            <p id="hslP">HSL:</p>
-        </div>
+      <div class="colorResultWrapper" id="colorResult2">
+        <div class="colorDiv"></div>
+        <p id="hexP">HEX:</p>
+        <p id="rgbP">RGB:</p>
+        <p id="hslP">HSL:</p>
+      </div>
 
-        <div class="colorResultWrapper" id="colorResult3">
-            <div class="colorDiv">
-            </div>
-            <p id="hexP">HEX:</p>
-            <p id="rgbP">RGB:</p>
-            <p id="hslP">HSL:</p>
-        </div>
+      <div class="colorResultWrapper" id="colorResult3">
+        <div class="colorDiv"></div>
+        <p id="hexP">HEX:</p>
+        <p id="rgbP">RGB:</p>
+        <p id="hslP">HSL:</p>
+      </div>
 
-        <div class="colorResultWrapper" id="colorResult4">
-            <div class="colorDiv">
-            </div>
-            <p id="hexP">HEX:</p>
-            <p id="rgbP">RGB:</p>
-            <p id="hslP">HSL:</p>
-        </div>
+      <div class="colorResultWrapper" id="colorResult4">
+        <div class="colorDiv"></div>
+        <p id="hexP">HEX:</p>
+        <p id="rgbP">RGB:</p>
+        <p id="hslP">HSL:</p>
+      </div>
     </div>
-</body>
-<script src="colorpicker.js"></script>
-
+  </body>
+  <script src="colorpicker.js"></script>
 </html>

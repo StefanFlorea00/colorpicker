@@ -6,13 +6,26 @@ function runColorPicker() {
   const colorPicker = document.querySelector("#colorpicker");
   const harmonySelect = document.querySelector("#harmonySelect");
 
+  initColorPicker(colorPicker, harmonySelect, "#c0ffee");
+
   harmonySelect.addEventListener("change", function () {
     console.log(getHarmony(this));
     calculateHarmony(getHarmony(this), getHexValue(colorPicker));
   });
   colorPicker.addEventListener("input", function () {
-    updateDisplayHex("#colorSelect", this.value);
+    updateDisplayHex("#colorSelect", getHexValue(this));
+    calculateHarmony(getHarmony(harmonySelect), getHexValue(this));
   });
+}
+
+function initColorPicker(colorPicker, harmonySelect, color) {
+  setHexValue(colorPicker, color);
+  updateDisplayHex("#colorSelect", colorPicker.value);
+  calculateHarmony(getHarmony(harmonySelect), getHexValue(colorPicker));
+}
+
+function setHarmony(element, value) {
+  return (element.value = value);
 }
 
 function getHarmony(element) {
@@ -25,13 +38,17 @@ function getHarmony(element) {
       return "triad";
     case "shades":
       return "shades";
-    default:
-      return "analogous";
+    case "compound":
+      return "compound";
   }
 }
 
 function getHexValue(element) {
   return element.value;
+}
+
+function setHexValue(element, value) {
+  return (element.value = value);
 }
 
 function getRGBValue(element) {
@@ -79,19 +96,66 @@ function calculateAnalogous(hexValue) {
   let rgbValue = hexToRGB(hexValue);
   let hslValue = RGBToHSL(rgbValue);
   for (let i = 0; i < 5; i++) {
-    hslValue.h = hslValue.h + i * 20;
-    console.log("updated", hslValue);
+    let j = 1;
+    if (i <= 1) j *= -1;
+    hslValue.h = hslValue.h + i * j * 10;
+    if (hslValue.h >= 360) hslValue.h -= 360;
+    if (hslValue.h < 0) hslValue.h += 360;
     updateDisplayHSL(`#colorResult${i}`, hslValue);
   }
 }
 
-function calculateMonochromatic(color) {}
+function calculateMonochromatic(hexValue) {
+  let rgbValue = hexToRGB(hexValue);
+  let hslValue = RGBToHSL(rgbValue);
+  for (let i = 0; i < 5; i++) {
+    let j = 1;
+    if (i <= 1) j *= -1;
+    hslValue.l = hslValue.l + i * j * 5;
+    if (hslValue.l >= 100) hslValue.l = 100;
+    if (hslValue.l < 1) hslValue.l = 0;
+    updateDisplayHSL(`#colorResult${i}`, hslValue);
+  }
+}
 
-function calculateTriad(color) {}
+function calculateTriad(hexValue) {
+  let rgbValue = hexToRGB(hexValue);
+  let hslValue = RGBToHSL(rgbValue);
+  for (let i = 0; i < 5; i++) {
+    let j = 1;
+    if (i <= 1) j *= -1;
+    hslValue.h = hslValue.h + i * j * 60;
+    if (hslValue.h >= 360) hslValue.h -= 360;
+    if (hslValue.h < 0) hslValue.h += 360;
+    updateDisplayHSL(`#colorResult${i}`, hslValue);
+  }
+}
 
-function calculateShades(color) {}
+function calculateShades(hexValue) {
+  let rgbValue = hexToRGB(hexValue);
+  let hslValue = RGBToHSL(rgbValue);
+  for (let i = 0; i < 5; i++) {
+    let j = 1;
+    if (i <= 1) j *= -1;
+    hslValue.l = hslValue.l - i * j * 5;
+    if (hslValue.l >= 100) hslValue.l = 100;
+    if (hslValue.l < 1) hslValue.l = 0;
+    updateDisplayHSL(`#colorResult${i}`, hslValue);
+  }
+}
 
-function calculateCompound(color) {}
+function calculateCompound(hexValue) {
+  let rgbValue = hexToRGB(hexValue);
+  let hslValue = RGBToHSL(rgbValue);
+  for (let i = 0; i < 5; i++) {
+    let j = 1;
+    if (i <= 1) j *= -1;
+    hslValue.h = hslValue.h + 30 * (i + 1) * j;
+    while (hslValue.h >= 360) hslValue.h -= 360;
+    while (hslValue.h < 0) hslValue.h += 360;
+    updateDisplayHSL(`#colorResult${i}`, hslValue);
+  }
+}
 
 function updateDisplayHSL(element, hslValue) {
   let rgbValue = HSLtoRGB(hslValue);
@@ -103,10 +167,10 @@ function updateDisplayHSL(element, hslValue) {
 }
 
 function updateDisplayHex(element, hexValue) {
-  let rgbValue = hexToRGB(hexValue);
-  let hslValue = RGBToHSL(rgbValue);
   updateHexView(`${element} #hexP`, hexValue);
+  let rgbValue = hexToRGB(hexValue);
   updateRGBView(`${element} #rgbP`, rgbValue);
+  let hslValue = RGBToHSL(rgbValue);
   updateHSLView(`${element} #hslP`, hslValue);
   updateColorView(`${element} .colorDiv`, hexValue);
 }
@@ -116,17 +180,17 @@ function updateColorView(element, hex) {
 }
 
 function updateHexView(element, hex) {
-  document.querySelector(element).textContent = "HEX: " + hex;
+  document.querySelector(element).textContent = hex;
 }
 
 function updateHSLView(element, hsl) {
   document.querySelector(element).textContent =
-    "HSL: " + hsl.h + "," + hsl.s + "%," + hsl.l + "%";
+    "hsl(" + hsl.h + "," + hsl.s + "%," + hsl.l + "%)";
 }
 
 function updateRGBView(element, rgb) {
   document.querySelector(element).textContent =
-    "RGB: " + rgb.r + "," + rgb.g + "," + rgb.b;
+    "rgb(" + rgb.r + "," + rgb.g + "," + rgb.b + ")";
 }
 
 function hexToRGB(hex) {
